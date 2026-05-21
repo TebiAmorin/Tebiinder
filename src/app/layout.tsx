@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,16 +12,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const spaceGrotesk = Space_Grotesk({
+const bebasNeue = Bebas_Neue({
   variable: "--font-display-family",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
   title: "Tebiinder — LFT/LFG Rainbow Six Siege",
   description:
-    "La plataforma de reclutamiento táctico definitiva para Rainbow Six Siege. Conecta con agentes libres (LFT) y equipos competitivos (LFG) en tiempo real.",
+    "La plataforma de reclutamiento definitiva para Rainbow Six Siege. Conecta con agentes libres (LFT) y escuadras competitivas (LFG) en tiempo real al estilo Neo-Brutalista.",
   keywords: ["Rainbow Six Siege", "R6S", "LFT", "LFG", "Esports", "Competición", "Tebiinder", "Ubisoft"],
   authors: [{ name: "Tebimedia" }],
   openGraph: {
@@ -39,12 +39,9 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col relative bg-bg-primary text-text-primary">
-        {/* Animated Scanning Line HUD Element */}
-        <div className="hud-scanline" />
-        
         {/* Main Content */}
         {children}
       </body>

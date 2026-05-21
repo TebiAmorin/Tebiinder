@@ -64,7 +64,6 @@ export default function ProfileModal({
     existingTeam?.integrantes_ubisoft_ids?.join(", ") ?? ""
   );
 
-  // Handle User Role Selection
   const handleSelectRole = async (selected: "jugador" | "capitan" | "ojeador") => {
     setLoading(true);
     setErrorMsg(null);
@@ -84,7 +83,6 @@ export default function ProfileModal({
     }
   };
 
-  // Submit Player Form
   const handleSubmitPlayer = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -107,7 +105,6 @@ export default function ProfileModal({
     }
   };
 
-  // Submit Team Form
   const handleSubmitTeam = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -137,35 +134,36 @@ export default function ProfileModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-bg-card border-2 border-border-card rounded-xl w-full max-w-xl max-h-[90vh] overflow-y-auto clip-tactical relative shadow-[0_0_50px_rgba(255,94,26,0.1)]">
-        {/* Glowing Orange top badge */}
-        <div className="h-1.5 w-full bg-accent-orange" />
+    <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 overflow-y-auto transition-opacity duration-75">
+      {/* Sticker-style Modal Container */}
+      <div className="bg-[#150a24] border-4 border-white rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        {/* Top thick orange stripe */}
+        <div className="h-2 w-full bg-[#FF5A00]" />
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-500 hover:text-white font-black text-lg p-1.5 hover:bg-white/5 rounded-lg transition-colors"
+          className="absolute top-5 right-5 text-zinc-400 hover:text-white font-black text-2xl p-1.5 hover:bg-white/10 rounded-xl transition-colors"
         >
           ✕
         </button>
 
         {/* Modal Header */}
-        <div className="p-6 border-b border-white/5">
-          <h2 className="font-display font-black text-2xl tracking-wide uppercase text-white">
+        <div className="p-6 border-b-2 border-white/10">
+          <h2 className="font-display font-bold text-4xl tracking-wide uppercase text-white leading-none">
             {step === "role-select" && "Selecciona tu Rol Táctico"}
             {step === "player-form" && "Configurar Ficha LFT (Jugador)"}
             {step === "team-form" && "Configurar Ficha LFG (Equipo)"}
             {step === "scout-success" && "Perfil de Ojeador"}
           </h2>
-          <p className="text-xs text-text-secondary mt-1 font-mono uppercase">
+          <p className="text-[10px] font-mono text-zinc-400 mt-2 uppercase font-bold tracking-wider">
             Identificación: {user.user_metadata?.full_name || "Agente"}
           </p>
         </div>
 
         {/* Error message */}
         {errorMsg && (
-          <div className="mx-6 mt-4 p-3 bg-red-950/40 border border-red-500/40 text-red-200 text-xs font-mono rounded">
+          <div className="mx-6 mt-4 p-3.5 bg-red-950/40 border-4 border-red-500 text-red-200 text-xs font-mono rounded-xl font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
             ⚠️ {errorMsg}
           </div>
         )}
@@ -173,26 +171,26 @@ export default function ProfileModal({
         <div className="p-6">
           {/* STEP 1: Role Selection Picker */}
           {step === "role-select" && (
-            <div className="space-y-4">
-              <p className="text-sm text-text-secondary mb-4 font-sans leading-relaxed">
+            <div className="space-y-5">
+              <p className="text-sm text-zinc-200 font-sans leading-relaxed">
                 Elige cómo quieres presentarte en Tebiinder. Podrás editar tu perfil y tus preferencias de reclutamiento en cualquier momento.
               </p>
 
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid grid-cols-1 gap-4">
                 {/* Player Card Picker */}
                 <button
                   disabled={loading}
                   onClick={() => handleSelectRole("jugador")}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-accent-orange/50 transition-all text-left group"
+                  className="flex items-center gap-4 p-4 rounded-2xl border-4 border-white bg-[#1c0f2f] hover:bg-[#25153e] hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-150 text-left group"
                 >
-                  <span className="w-12 h-12 rounded-lg bg-accent-orange/20 border border-accent-orange/40 flex items-center justify-center text-accent-orange group-hover:scale-105 transition-transform text-2xl">
+                  <span className="w-14 h-14 rounded-xl bg-[#FF5A00] border-2 border-black flex items-center justify-center text-white text-3xl group-hover:scale-105 transition-transform">
                     🎯
                   </span>
                   <div>
-                    <h4 className="font-display font-bold uppercase text-white group-hover:text-accent-orange transition-colors">
+                    <h4 className="font-display font-bold text-2xl uppercase tracking-wider text-white group-hover:text-[#FF5A00] transition-colors leading-none">
                       Jugador Libre (LFT)
                     </h4>
-                    <p className="text-xs text-zinc-500 font-mono mt-0.5">
+                    <p className="text-xs text-zinc-400 font-mono mt-1">
                       Busca un equipo para competir. Muestra tus estadísticas y roles principales.
                     </p>
                   </div>
@@ -202,16 +200,16 @@ export default function ProfileModal({
                 <button
                   disabled={loading}
                   onClick={() => handleSelectRole("capitan")}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-accent-blue/50 transition-all text-left group"
+                  className="flex items-center gap-4 p-4 rounded-2xl border-4 border-white bg-[#1c0f2f] hover:bg-[#25153e] hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-150 text-left group"
                 >
-                  <span className="w-12 h-12 rounded-lg bg-accent-blue/20 border border-accent-blue/40 flex items-center justify-center text-accent-blue group-hover:scale-105 transition-transform text-2xl">
+                  <span className="w-14 h-14 rounded-xl bg-[#00F5D4] border-2 border-black flex items-center justify-center text-black text-3xl group-hover:scale-105 transition-transform">
                     🛡️
                   </span>
                   <div>
-                    <h4 className="font-display font-bold uppercase text-white group-hover:text-accent-blue transition-colors">
+                    <h4 className="font-display font-bold text-2xl uppercase tracking-wider text-white group-hover:text-[#00F5D4] transition-colors leading-none">
                       Capitán de Escuadra (LFG)
                     </h4>
-                    <p className="text-xs text-zinc-500 font-mono mt-0.5">
+                    <p className="text-xs text-zinc-400 font-mono mt-1">
                       Recluta agentes libres para tu roster. Calcula la media de tu equipo automáticamente.
                     </p>
                   </div>
@@ -221,16 +219,16 @@ export default function ProfileModal({
                 <button
                   disabled={loading}
                   onClick={() => handleSelectRole("ojeador")}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 transition-all text-left group"
+                  className="flex items-center gap-4 p-4 rounded-2xl border-4 border-white bg-[#1c0f2f] hover:bg-[#25153e] hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-150 text-left group"
                 >
-                  <span className="w-12 h-12 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300 group-hover:scale-105 transition-transform text-2xl">
+                  <span className="w-14 h-14 rounded-xl bg-zinc-700 border-2 border-black flex items-center justify-center text-zinc-200 text-3xl group-hover:scale-105 transition-transform">
                     📡
                   </span>
                   <div>
-                    <h4 className="font-display font-bold uppercase text-white group-hover:text-zinc-300 transition-colors">
+                    <h4 className="font-display font-bold text-2xl uppercase tracking-wider text-white group-hover:text-zinc-300 transition-colors leading-none">
                       Ojeador / Scout
                     </h4>
-                    <p className="text-xs text-zinc-500 font-mono mt-0.5">
+                    <p className="text-xs text-zinc-400 font-mono mt-1">
                       Solo quieres observar el tablero de ofertas sin publicar fichas competitivas.
                     </p>
                   </div>
@@ -245,7 +243,7 @@ export default function ProfileModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Ubisoft Connect ID */}
                 <div className="sm:col-span-2">
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Ubisoft Connect ID (Para sincronizar rango y K/D)
                   </label>
                   <input
@@ -254,19 +252,19 @@ export default function ProfileModal({
                     placeholder="Ej: Shaiiko.BDS"
                     value={ubisoftId}
                     onChange={(e) => setUbisoftId(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange font-mono"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00]"
                   />
                 </div>
 
                 {/* Platform */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Plataforma
                   </label>
                   <select
                     value={plataforma}
                     onChange={(e) => setPlataforma(e.target.value as Plataforma)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="pc">PC (Ubisoft)</option>
                     <option value="playstation">PlayStation</option>
@@ -276,13 +274,13 @@ export default function ProfileModal({
 
                 {/* Region */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Región
                   </label>
                   <select
                     value={region}
                     onChange={(e) => setRegion(e.target.value as Region)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="eu-west">Europa Oeste</option>
                     <option value="eu-east">Europa Este</option>
@@ -294,13 +292,13 @@ export default function ProfileModal({
 
                 {/* Primary Role */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Rol Principal
                   </label>
                   <select
                     value={rolPrincipal}
                     onChange={(e) => setRolPrincipal(e.target.value as Rol)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="entry-fragger">Entry Fragger</option>
                     <option value="support">Support</option>
@@ -314,13 +312,13 @@ export default function ProfileModal({
 
                 {/* Secondary Role */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Rol Secundario
                   </label>
                   <select
                     value={rolSecundario}
                     onChange={(e) => setRolSecundario(e.target.value as Rol | "")}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="">Ninguno</option>
                     <option value="entry-fragger">Entry Fragger</option>
@@ -335,13 +333,13 @@ export default function ProfileModal({
 
                 {/* Availability */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Disponibilidad
                   </label>
                   <select
                     value={disponibilidad}
                     onChange={(e) => setDisponibilidad(e.target.value as Disponibilidad)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="flexible">Flexible</option>
                     <option value="diaria">Diaria (Entrenos)</option>
@@ -352,7 +350,7 @@ export default function ProfileModal({
 
                 {/* Language */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Idiomas
                   </label>
                   <input
@@ -361,24 +359,24 @@ export default function ProfileModal({
                     placeholder="Ej: es/en"
                     value={idioma}
                     onChange={(e) => setIdioma(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange font-mono"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00]"
                   />
                 </div>
               </div>
 
               {/* Form buttons */}
-              <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+              <div className="flex items-center gap-3 pt-5 border-t-2 border-white/10">
                 <button
                   type="button"
                   onClick={() => setStep("role-select")}
-                  className="flex-1 py-3 border-2 border-white/10 rounded-lg font-display font-bold uppercase hover:bg-white/5 transition-colors"
+                  className="flex-1 py-3 border-4 border-white text-white bg-transparent rounded-xl font-display font-bold text-xl uppercase tracking-wider hover:bg-white/5 active:scale-95 transition-transform duration-100"
                 >
                   Atrás
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-3 bg-accent-orange text-white border-2 border-accent-orange rounded-lg font-display font-bold uppercase hover:bg-transparent hover:text-accent-orange transition-all disabled:opacity-50"
+                  className="flex-1 py-3 bg-[#FF5A00] text-white border-4 border-black rounded-xl font-display font-bold text-xl uppercase tracking-wider neo-shadow hover:scale-105 active:scale-95 transition-transform duration-100 disabled:opacity-50"
                 >
                   {loading ? "Sincronizando..." : "Publicar Ficha LFT"}
                 </button>
@@ -392,7 +390,7 @@ export default function ProfileModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Team Name */}
                 <div className="sm:col-span-2">
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Nombre del Equipo / Club
                   </label>
                   <input
@@ -401,13 +399,13 @@ export default function ProfileModal({
                     placeholder="Ej: BDS Esports"
                     value={nombreEquipo}
                     onChange={(e) => setNombreEquipo(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange font-mono"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00]"
                   />
                 </div>
 
                 {/* Team Description */}
                 <div className="sm:col-span-2">
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Descripción / Objetivos del Roster
                   </label>
                   <textarea
@@ -415,19 +413,19 @@ export default function ProfileModal({
                     placeholder="Describe los entrenamientos, objetivos, torneos que jugaréis y el nivel requerido..."
                     value={descripcion}
                     onChange={(e) => setDescripcion(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-accent-orange font-mono"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl p-3.5 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00]"
                   />
                 </div>
 
                 {/* Platform */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Plataforma Principal
                   </label>
                   <select
                     value={teamPlataforma}
                     onChange={(e) => setTeamPlataforma(e.target.value as Plataforma)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="pc">PC (Ubisoft)</option>
                     <option value="playstation">PlayStation</option>
@@ -437,13 +435,13 @@ export default function ProfileModal({
 
                 {/* Region */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Región
                   </label>
                   <select
                     value={teamRegion}
                     onChange={(e) => setTeamRegion(e.target.value as Region)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="eu-west">Europa Oeste</option>
                     <option value="eu-east">Europa Este</option>
@@ -455,13 +453,13 @@ export default function ProfileModal({
 
                 {/* Sought Role */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Rol Buscado
                   </label>
                   <select
                     value={rolBuscado}
                     onChange={(e) => setRolBuscado(e.target.value as Rol)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange cursor-pointer"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
                   >
                     <option value="entry-fragger">Entry Fragger</option>
                     <option value="support">Support</option>
@@ -475,7 +473,7 @@ export default function ProfileModal({
 
                 {/* Language */}
                 <div>
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Idiomas Hablados
                   </label>
                   <input
@@ -484,13 +482,13 @@ export default function ProfileModal({
                     placeholder="Ej: es/en"
                     value={teamIdioma}
                     onChange={(e) => setTeamIdioma(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange font-mono"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00]"
                   />
                 </div>
 
                 {/* Teammates roster input */}
                 <div className="sm:col-span-2">
-                  <label className="block text-zinc-500 font-bold uppercase tracking-wider mb-1.5">
+                  <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">
                     Ubisoft Connect IDs de los Integrantes (Separados por comas)
                   </label>
                   <input
@@ -498,27 +496,27 @@ export default function ProfileModal({
                     placeholder="Ej: Shaiiko.BDS, BriD.BDS, LikEfac.BDS"
                     value={integrantesInput}
                     onChange={(e) => setIntegrantesInput(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:border-accent-orange font-mono"
+                    className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00]"
                   />
-                  <p className="text-[10px] text-zinc-500 mt-1 font-mono">
+                  <p className="text-[10px] text-zinc-400 mt-2 font-bold leading-normal">
                     Los rangos y K/D de los integrantes se procesarán en paralelo para calcular la media de tu escuadra.
                   </p>
                 </div>
               </div>
 
               {/* Form buttons */}
-              <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+              <div className="flex items-center gap-3 pt-5 border-t-2 border-white/10">
                 <button
                   type="button"
                   onClick={() => setStep("role-select")}
-                  className="flex-1 py-3 border-2 border-white/10 rounded-lg font-display font-bold uppercase hover:bg-white/5 transition-colors"
+                  className="flex-1 py-3 border-4 border-white text-white bg-transparent rounded-xl font-display font-bold text-xl uppercase tracking-wider hover:bg-white/5 active:scale-95 transition-transform duration-100"
                 >
                   Atrás
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-3 bg-accent-blue text-black border-2 border-accent-blue rounded-lg font-display font-bold uppercase hover:bg-transparent hover:text-accent-blue transition-all disabled:opacity-50"
+                  className="flex-1 py-3 bg-[#00F5D4] text-black border-4 border-black rounded-xl font-display font-bold text-xl uppercase tracking-wider neo-shadow hover:scale-105 active:scale-95 transition-transform duration-100 disabled:opacity-50"
                 >
                   {loading ? "Calculando..." : "Publicar Ficha LFG"}
                 </button>
@@ -529,18 +527,18 @@ export default function ProfileModal({
           {/* STEP 2C: Scout Success state */}
           {step === "scout-success" && (
             <div className="text-center py-8 space-y-4">
-              <span className="text-5xl block animate-bounce">📡</span>
-              <h3 className="font-display font-bold uppercase text-white text-lg">
+              <span className="text-6xl block animate-bounce">📡</span>
+              <h3 className="font-display font-bold text-3xl uppercase tracking-wider text-white leading-none">
                 ¡Rol de Ojeador Activado!
               </h3>
-              <p className="text-xs font-mono text-text-secondary max-w-sm mx-auto leading-relaxed">
+              <p className="text-sm text-zinc-300 max-w-sm mx-auto leading-relaxed font-sans">
                 Has configurado tu perfil como Ojeador. Ahora puedes navegar libremente por los tablones sin publicar ninguna oferta competitiva propia.
               </p>
               
-              <div className="pt-6 border-t border-white/5">
+              <div className="pt-6 border-t-2 border-white/10">
                 <button
                   onClick={onSaveSuccess}
-                  className="w-full py-3 bg-white text-black border-2 border-white rounded-lg font-display font-bold uppercase hover:bg-transparent hover:text-white transition-all"
+                  className="w-full py-3.5 bg-white text-black border-4 border-black rounded-xl font-display font-bold text-xl uppercase tracking-wider neo-shadow hover:scale-105 active:scale-95 transition-transform duration-100"
                 >
                   Cerrar y Ver Tablones
                 </button>

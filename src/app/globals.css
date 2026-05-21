@@ -1,33 +1,28 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Tebiinder Design System — Tactical HUD Version (R6 Inspired)
+   Tebiinder Design System — Soft Neo-Brutalism / Sticker Style
    ============================================================ */
 
 :root {
-  --bg-primary: #0A0A0F;
-  --bg-card: #12121E;
-  --border-card: rgba(255, 255, 255, 0.08);
-  --border-card-hover: rgba(255, 94, 26, 0.4);
+  --bg-primary: #5f25a3; /* Lavender Purple */
+  --bg-card: #150a24; /* Sólido morado oscuro */
+  --border-card: #FFFFFF; /* Borde blanco grueso */
   --text-primary: #FFFFFF;
-  --text-secondary: #9CA3AF;
-  --accent-orange: #FF5E1A;
-  --accent-blue: #00E5FF;
-  --accent-green: #10B981;
-  --bg-grid: rgba(255, 255, 255, 0.02);
-  --bg-grid-highlight: rgba(255, 94, 26, 0.02);
+  --text-secondary: #E9D5FF; /* Lavanda claro */
+  --accent-orange: #FF5A00; /* Naranja cálido vibrante del botón */
+  --accent-blue: #00F5D4; /* Turquesa */
+  --bg-grid: rgba(255, 255, 255, 0.08); /* Sutil rejilla blanca */
 }
 
 @theme inline {
   --color-bg-primary: var(--bg-primary);
   --color-bg-card: var(--bg-card);
   --color-border-card: var(--border-card);
-  --color-border-card-hover: var(--border-card-hover);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-accent-orange: var(--accent-orange);
   --color-accent-blue: var(--accent-blue);
-  --color-accent-green: var(--accent-green);
 
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
@@ -39,41 +34,27 @@ body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   background-image:
-    linear-gradient(var(--bg-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
-  background-size: 32px 32px;
+    linear-gradient(var(--bg-grid) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, var(--bg-grid) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Diagonal stripes decorative background */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(255, 94, 26, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
-  z-index: -1;
-}
-
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0F;
+  background: #150a24;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1F1F35;
+  background: var(--bg-primary);
+  border: 2px solid #150a24;
   border-radius: 4px;
 }
 
@@ -81,49 +62,26 @@ body::before {
   background: var(--accent-orange);
 }
 
-/* HUD Scanning line animation */
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
+/* Neo-Brutalist Solid Shadow Utilities */
+.neo-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 
-.hud-scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(180deg, transparent, rgba(255, 94, 26, 0.2), transparent);
-  animation: scanline 8s linear infinite;
-  pointer-events: none;
-  z-index: 10;
+.neo-shadow-lg {
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
 }
 
-/* Tactical borders & clips */
-.clip-tactical {
-  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+.neo-shadow-hover {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.clip-tactical-sm {
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+.neo-shadow-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
 }
 
-/* Utility Animations */
-.animate-pulse-slow {
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    filter: drop-shadow(0 0 2px rgba(255, 94, 26, 0.3));
-  }
-  50% {
-    opacity: .6;
-    filter: drop-shadow(0 0 10px rgba(255, 94, 26, 0.6));
-  }
+.neo-shadow-hover:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
 }
