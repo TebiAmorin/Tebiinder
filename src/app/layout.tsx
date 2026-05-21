@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,10 +7,28 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display-family",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Tebiinder — LFT/LFG R6 Siege",
+  title: "Tebiinder — LFT/LFG Rainbow Six Siege",
   description:
-    "Conecta jugadores y equipos de Rainbow Six Siege para competiciones. Free Agents y equipos LFG en un solo lugar.",
+    "La plataforma de reclutamiento táctico definitiva para Rainbow Six Siege. Conecta con agentes libres (LFT) y equipos competitivos (LFG) en tiempo real.",
+  keywords: ["Rainbow Six Siege", "R6S", "LFT", "LFG", "Esports", "Competición", "Tebiinder", "Ubisoft"],
+  authors: [{ name: "Tebimedia" }],
+  openGraph: {
+    title: "Tebiinder — LFT/LFG Rainbow Six Siege",
+    description: "Encuentra tu equipo o recluta jugadores de primer nivel para Rainbow Six Siege.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -19,8 +37,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="es"
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col relative bg-bg-primary text-text-primary">
+        {/* Animated Scanning Line HUD Element */}
+        <div className="hud-scanline" />
+        
+        {/* Main Content */}
+        {children}
+      </body>
     </html>
   );
 }
