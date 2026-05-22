@@ -3,13 +3,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { fetchPlayerStats } from "@/lib/r6tracker/api";
 import { calculateTeamStats } from "@/lib/r6tracker/team-stats";
-import type { Rol, Region, Plataforma, Disponibilidad } from "@/types/database";
+import type { Rol, Plataforma, Disponibilidad } from "@/types/database";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Helper: .from() con cast para evitar el bug de generics de Supabase v2
-// con tipos manuales (resuelve Insert/Update como `never`).
-// La validación real ocurre en la DB (constraints + RLS).
+// Valores fijos para España
+const FIXED_REGION = "eu-west";
+const FIXED_IDIOMA = "es";
+
 async function db() {
   const supabase = await createClient();
   return {
@@ -44,8 +45,6 @@ interface PlayerFormData {
   rolPrincipal: Rol;
   rolSecundario?: Rol;
   disponibilidad: Disponibilidad;
-  region: Region;
-  idioma: string;
   plataforma: Plataforma;
 }
 
@@ -61,7 +60,6 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
     user.user_metadata?.full_name ?? user.user_metadata?.name ?? "usuario";
   const discordAvatar = user.user_metadata?.avatar_url ?? null;
 
-  // Fetch stats de Ubisoft si se proporcionó el ID
   let rango: string | null = null;
   let kd: number | null = null;
 
@@ -90,8 +88,8 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
       rol_principal: formData.rolPrincipal,
       rol_secundario: formData.rolSecundario ?? null,
       disponibilidad: formData.disponibilidad,
-      region: formData.region,
-      idioma: formData.idioma,
+      region: FIXED_REGION,
+      idioma: FIXED_IDIOMA,
       plataforma: formData.plataforma,
     },
     { onConflict: "user_id" }
@@ -107,8 +105,6 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
 interface TeamFormData {
   nombreEquipo: string;
   descripcion?: string;
-  region: Region;
-  idioma: string;
   plataforma: Plataforma;
   rolBuscado: Rol;
   integrantesUbisoftIds?: string[];
@@ -150,8 +146,8 @@ export async function upsertTeamProfile(formData: TeamFormData) {
       discord_username_capitan: discordUsername,
       discord_avatar_capitan: discordAvatar,
       descripcion: formData.descripcion ?? null,
-      region: formData.region,
-      idioma: formData.idioma,
+      region: FIXED_REGION,
+      idioma: FIXED_IDIOMA,
       plataforma: formData.plataforma,
       rol_buscado: formData.rolBuscado,
       rango_medio: rangoMedio,
@@ -163,6 +159,65 @@ export async function upsertTeamProfile(formData: TeamFormData) {
 
   if (error) throw new Error(error.message);
   return { success: true, rangoMedio, kdMedio };
+}
+
+// ============================================================
+// Retirar ficha (jugador encontró equipo / capitán completó roster)
+// ============================================================
+export async function deletePlayerProfile() {
+  const { supabase, jugadores, perfiles } = await db();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("No autenticado");
+
+  const { error } = await jugadores().delete().eq("user_id", user.id);
+  if (error) throw new Error(error.message);
+
+  // Volver a rol invitado
+  await perfiles().update({ rol: "invitado" }).eq("user_id", user.id);
+
+  return { success: true };
+}
+
+export async function deleteTeamProfile() {
+  const { supabase, equipos, perfiles } = await db();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("No autenticado");
+
+  const { error } = await equipos().delete().eq("capitan_id", user.id);
+  if (error) throw new Error(error.message);
+
+  await perfiles().update({ rol: "invitado" }).eq("user_id", user.id);
+
+  return { success: true };
+}
+
+// ============================================================
+// Admin: Toggle destacado (Modo Streamer)
+// Llama a la RPC toggle_destacado con security definer
+// ============================================================
+export async function toggleDestacado(
+  tabla: "jugadores" | "equipos",
+  registroId: string,
+  valor: boolean
+) {
+  const { supabase } = await db();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("No autenticado");
+
+  const { error } = await (supabase.rpc as any)("toggle_destacado", {
+    tabla,
+    registro_id: registroId,
+    valor,
+  });
+
+  if (error) throw new Error(error.message);
+  return { success: true };
 }
 
 // ============================================================

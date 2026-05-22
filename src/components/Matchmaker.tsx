@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { Database } from "@/types/database";
+import { createClient } from "@/lib/supabase/client";
 import GamerCard from "./GamerCard";
 import TeamCard from "./TeamCard";
 
@@ -14,16 +15,79 @@ interface MatchmakerProps {
 }
 
 export default function Matchmaker({ initialJugadores, initialEquipos }: MatchmakerProps) {
+  const [jugadores, setJugadores] = useState<Jugador[]>(initialJugadores);
+  const [equipos, setEquipos] = useState<Equipo[]>(initialEquipos);
   const [view, setView] = useState<"jugadores" | "equipos">("jugadores");
-  const [regionFilter, setRegionFilter] = useState("all");
   const [platformFilter, setPlatformFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"recent" | "kd">("recent");
+  const [realtimeActive, setRealtimeActive] = useState(false);
+
+  // ── Supabase Realtime subscription ──
+  useEffect(() => {
+    const supabase = createClient();
+
+    const channel = supabase
+      .channel("matchmaker-realtime")
+      // Listen to jugadores changes
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "jugadores" },
+        (payload) => {
+          if (payload.eventType === "UPDATE") {
+            const updated = payload.new as Jugador;
+            setJugadores((prev) =>
+              prev.map((j) => (j.id === updated.id ? updated : j))
+            );
+          } else if (payload.eventType === "INSERT") {
+            const inserted = payload.new as Jugador;
+            setJugadores((prev) => [inserted, ...prev]);
+          } else if (payload.eventType === "DELETE") {
+            const deleted = payload.old as { id: string };
+            setJugadores((prev) => prev.filter((j) => j.id !== deleted.id));
+          }
+        }
+      )
+      // Listen to equipos changes
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "equipos" },
+        (payload) => {
+          if (payload.eventType === "UPDATE") {
+            const updated = payload.new as Equipo;
+            setEquipos((prev) =>
+              prev.map((e) => (e.id === updated.id ? updated : e))
+            );
+          } else if (payload.eventType === "INSERT") {
+            const inserted = payload.new as Equipo;
+            setEquipos((prev) => [inserted, ...prev]);
+          } else if (payload.eventType === "DELETE") {
+            const deleted = payload.old as { id: string };
+            setEquipos((prev) => prev.filter((e) => e.id !== deleted.id));
+          }
+        }
+      )
+      .subscribe((status) => {
+        setRealtimeActive(status === "SUBSCRIBED");
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Sync when server data changes (e.g. page navigation)
+  useEffect(() => {
+    setJugadores(initialJugadores);
+  }, [initialJugadores]);
+
+  useEffect(() => {
+    setEquipos(initialEquipos);
+  }, [initialEquipos]);
 
   const handleViewChange = (newView: "jugadores" | "equipos") => {
     setView(newView);
-    setRegionFilter("all");
     setPlatformFilter("all");
     setRoleFilter("all");
     setSearchQuery("");
@@ -32,11 +96,8 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
 
   // Filter and Sort players
   const filteredJugadores = useMemo(() => {
-    let result = [...initialJugadores];
+    let result = [...jugadores];
 
-    if (regionFilter !== "all") {
-      result = result.filter((j) => j.region === regionFilter);
-    }
     if (platformFilter !== "all") {
       result = result.filter((j) => j.plataforma === platformFilter);
     }
@@ -61,15 +122,12 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
     result.sort((a, b) => (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0));
 
     return result;
-  }, [initialJugadores, regionFilter, platformFilter, roleFilter, searchQuery, sortBy]);
+  }, [jugadores, platformFilter, roleFilter, searchQuery, sortBy]);
 
   // Filter and Sort teams
   const filteredEquipos = useMemo(() => {
-    let result = [...initialEquipos];
+    let result = [...equipos];
 
-    if (regionFilter !== "all") {
-      result = result.filter((e) => e.region === regionFilter);
-    }
     if (platformFilter !== "all") {
       result = result.filter((e) => e.plataforma === platformFilter);
     }
@@ -95,7 +153,7 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
     result.sort((a, b) => (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0));
 
     return result;
-  }, [initialEquipos, regionFilter, platformFilter, roleFilter, searchQuery, sortBy]);
+  }, [equipos, platformFilter, roleFilter, searchQuery, sortBy]);
 
   return (
     <div className="w-full max-w-5xl space-y-6">
@@ -132,16 +190,25 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
 
       {/* 2. Soft Neo-Brutalist Filter Box */}
       <div className="bg-bg-card border-4 border-white rounded-3xl p-6 neo-shadow-lg space-y-5">
-        <div className="flex items-center gap-2.5 border-b-2 border-white/10 pb-3.5">
-          <span className="w-3.5 h-3.5 rounded-full bg-[#FF5A00] border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" />
-          <h3 className="font-display font-bold uppercase text-2xl tracking-wide text-white leading-none">
-            Consola de Filtros de Reclutamiento
-          </h3>
+        <div className="flex items-center justify-between border-b-2 border-white/10 pb-3.5">
+          <div className="flex items-center gap-2.5">
+            <span className="w-3.5 h-3.5 rounded-full bg-[#FF5A00] border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" />
+            <h3 className="font-display font-bold uppercase text-2xl tracking-wide text-white leading-none">
+              Filtros de Reclutamiento
+            </h3>
+          </div>
+          {/* Realtime indicator */}
+          {realtimeActive && (
+            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/40 border border-emerald-500/50 rounded-lg text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              En vivo
+            </span>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
           {/* Search bar */}
-          <div className="sm:col-span-2 md:col-span-1">
+          <div>
             <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">Buscar</label>
             <div className="relative">
               <input
@@ -151,25 +218,7 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] placeholder-zinc-500"
               />
-              <span className="absolute right-4 top-3.5 text-base">🔍</span>
             </div>
-          </div>
-
-          {/* Region selector */}
-          <div>
-            <label className="block text-zinc-300 font-bold uppercase tracking-wider mb-2">Región</label>
-            <select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              className="w-full bg-[#1c0f2f] border-4 border-white text-white rounded-xl py-3 px-4 font-mono font-bold text-sm focus:outline-none focus:border-[#FF5A00] cursor-pointer"
-            >
-              <option value="all">Cualquier Región</option>
-              <option value="eu-west">Europa Oeste (EUW)</option>
-              <option value="eu-east">Europa Este (EUE)</option>
-              <option value="na">Norteamérica (NA)</option>
-              <option value="latam">Latinoamérica (LATAM)</option>
-              <option value="apac">Asia Pacífico (APAC)</option>
-            </select>
           </div>
 
           {/* Platform selector */}
@@ -255,12 +304,12 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
             </div>
           ) : (
             <div className="text-center py-16 bg-bg-card border-4 border-white rounded-3xl neo-shadow p-6">
-              <span className="text-5xl block mb-4">📡</span>
+              <span className="text-5xl block mb-4">&#128225;</span>
               <h4 className="font-display font-bold uppercase text-2xl text-zinc-400 mb-1 leading-none">
                 No se encontraron agentes libres LFT
               </h4>
               <p className="text-xs font-mono text-zinc-500 max-w-sm mx-auto">
-                Prueba ajustando los filtros de reclutamiento o buscando otros términos.
+                Prueba ajustando los filtros de reclutamiento o buscando otros terminos.
               </p>
             </div>
           )
@@ -273,12 +322,12 @@ export default function Matchmaker({ initialJugadores, initialEquipos }: Matchma
             </div>
           ) : (
             <div className="text-center py-16 bg-bg-card border-4 border-white rounded-3xl neo-shadow p-6">
-              <span className="text-5xl block mb-4">🏟️</span>
+              <span className="text-5xl block mb-4">&#127967;&#65039;</span>
               <h4 className="font-display font-bold uppercase text-2xl text-zinc-400 mb-1 leading-none">
                 No se encontraron escuadras LFG
               </h4>
               <p className="text-xs font-mono text-zinc-500 max-w-sm mx-auto">
-                No hay escuadras buscando ese rol actualmente. ¡Prueba a crear tu propio equipo!
+                No hay escuadras buscando ese rol actualmente.
               </p>
             </div>
           )
