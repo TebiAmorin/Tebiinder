@@ -237,7 +237,7 @@ export async function refreshPlayerStats() {
 
   if (!jugador?.ubisoft_id) throw new Error("Sin Ubisoft ID configurado");
 
-  const stats = await fetchPlayerStats(jugador.ubisoft_id, jugador.plataforma);
+  const stats = await fetchPlayerStats(jugador.ubisoft_id, jugador.plataforma, true);
 
   const { error } = await jugadores()
     .update({ rango: stats.rank, kd: stats.kd })
