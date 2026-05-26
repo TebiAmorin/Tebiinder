@@ -119,6 +119,13 @@ export default function SearchPage({
       {/* ── MATCHMAKER ── */}
       <Matchmaker initialJugadores={jugadores} initialEquipos={equipos} />
 
+      {/* Footer */}
+      <footer className="w-full max-w-5xl border-t-4 border-white/10 py-6 mt-10 text-center">
+        <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
+          Tebiinder &mdash; Tebimedia &copy; 2025 &middot; Rainbow Six Siege es marca registrada de Ubisoft
+        </p>
+      </footer>
+
       {/* Profile Modal */}
       {showProfileModal && user && (
         <ProfileModal

@@ -72,7 +72,7 @@ export default function TeamCard({ equipo }: TeamCardProps) {
           <div>
             <div className="flex items-center gap-2">
               {/* Giant Bebas Neue heading */}
-              <h4 className="font-display font-bold text-3xl leading-none uppercase tracking-tight text-white group-hover:text-[#00F5D4] transition-colors">
+              <h4 className="font-display font-bold text-2xl sm:text-3xl leading-none uppercase tracking-tight text-white group-hover:text-[#00F5D4] transition-colors truncate max-w-[160px] sm:max-w-none">
                 {equipo.nombre_equipo}
               </h4>
               <span className="px-2 py-0.5 border border-white text-[10px] font-mono font-bold bg-white/10 rounded uppercase text-white">
@@ -106,7 +106,7 @@ export default function TeamCard({ equipo }: TeamCardProps) {
           </div>
 
           {/* Average Rank Block - Sticker Style */}
-          <div className={`px-4 py-1.5 rounded-xl border-4 border-black neo-shadow ${rankTheme.bg} flex flex-col items-center justify-center min-w-[110px]`}>
+          <div className={`px-3 sm:px-4 py-1.5 rounded-xl border-4 border-black neo-shadow ${rankTheme.bg} flex flex-col items-center justify-center min-w-[90px] sm:min-w-[110px]`}>
             <span className="text-[8px] font-mono font-bold tracking-wider text-black/60 uppercase leading-none">
               RANGO MEDIO
             </span>
@@ -127,21 +127,7 @@ export default function TeamCard({ equipo }: TeamCardProps) {
           &quot;{equipo.descripcion || "Sin descripción proporcionada."}&quot;
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-xs font-mono mb-5">
-          <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
-            <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Región</span>
-            <span className="text-white font-bold text-sm block mt-0.5 uppercase">
-              {equipo.region}
-            </span>
-          </div>
-
-          <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
-            <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Idiomas</span>
-            <span className="text-white font-bold text-sm block mt-0.5 uppercase">
-              {equipo.idioma}
-            </span>
-          </div>
-
+        <div className="grid grid-cols-1 gap-4 text-xs font-mono mb-5">
           <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
             <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Capitán</span>
             <span className="text-white font-bold text-sm block mt-0.5 truncate uppercase">

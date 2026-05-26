@@ -9,6 +9,7 @@ import {
   upsertTeamProfile,
   deletePlayerProfile,
   deleteTeamProfile,
+  refreshPlayerStats,
 } from "@/app/actions/profile";
 
 type Jugador = Database["public"]["Tables"]["jugadores"]["Row"];
@@ -47,6 +48,10 @@ export default function ProfileModal({
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [statsPreview, setStatsPreview] = useState<{ rango: string | null; kd: number | null } | null>(
+    existingPlayer ? { rango: existingPlayer.rango, kd: existingPlayer.kd ? Number(existingPlayer.kd) : null } : null
+  );
 
   // Player LFT form state
   const [ubisoftId, setUbisoftId] = useState(existingPlayer?.ubisoft_id ?? "");
@@ -86,18 +91,34 @@ export default function ProfileModal({
     setLoading(true);
     setErrorMsg(null);
     try {
-      await upsertPlayerProfile({
+      const result = await upsertPlayerProfile({
         ubisoftId: ubisoftId.trim() || undefined,
         rolPrincipal,
         rolSecundario: rolSecundario || undefined,
         disponibilidad,
         plataforma,
       });
+      if (result.rango || result.kd) {
+        setStatsPreview({ rango: result.rango, kd: result.kd });
+      }
       onSaveSuccess();
     } catch (err: any) {
       setErrorMsg(err.message || "Error al guardar ficha");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRefreshStats = async () => {
+    setRefreshing(true);
+    setErrorMsg(null);
+    try {
+      const result = await refreshPlayerStats();
+      setStatsPreview({ rango: result.rango, kd: result.kd });
+    } catch (err: any) {
+      setErrorMsg(err.message || "No se pudieron actualizar las stats");
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -249,7 +270,7 @@ export default function ProfileModal({
           {/* ── STEP: Player Form (Simplified) ── */}
           {step === "player-form" && (
             <form onSubmit={handleSubmitPlayer} className="space-y-4">
-              {/* Ubisoft ID */}
+              {/* Ubisoft ID + Stats Preview */}
               <div>
                 <label className={labelClass}>Ubisoft Connect ID</label>
                 <input
@@ -260,11 +281,40 @@ export default function ProfileModal({
                   className={inputClass}
                 />
                 <p className="text-[10px] text-zinc-500 font-mono mt-1">
-                  Se sincronizarán tu rango y K/D automáticamente.
+                  Se sincronizarán tu rango y K/D automáticamente con R6 Tracker.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              {/* Stats preview (shown when player has stats) */}
+              {statsPreview && (statsPreview.rango || statsPreview.kd !== null) && (
+                <div className="flex items-center justify-between gap-3 p-3 bg-[#1c0f2f] border-2 border-white/20 rounded-xl">
+                  <div className="flex items-center gap-4 text-sm font-mono">
+                    <div>
+                      <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Rango</span>
+                      <span className="text-white font-bold">{statsPreview.rango || "N/A"}</span>
+                    </div>
+                    <div>
+                      <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">K/D</span>
+                      <span className="text-white font-bold">{statsPreview.kd !== null ? statsPreview.kd.toFixed(2) : "N/A"}</span>
+                    </div>
+                  </div>
+                  {existingPlayer?.ubisoft_id && (
+                    <button
+                      type="button"
+                      onClick={handleRefreshStats}
+                      disabled={refreshing}
+                      className="shrink-0 px-3 py-2 bg-[#150a24] border-2 border-white/30 rounded-lg text-[10px] font-mono font-bold text-zinc-300 hover:text-white hover:border-white transition-colors uppercase tracking-wider disabled:opacity-50 flex items-center gap-1.5 min-h-[38px]"
+                    >
+                      <svg className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      {refreshing ? "..." : "Refrescar"}
+                    </button>
+                  )}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Platform */}
                 <div>
                   <label className={labelClass}>Plataforma</label>
@@ -356,7 +406,7 @@ export default function ProfileModal({
                   className={inputClass + " resize-none"} />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className={labelClass}>Plataforma</label>
                   <select value={teamPlataforma} onChange={(e) => setTeamPlataforma(e.target.value as Plataforma)} className={selectClass}>

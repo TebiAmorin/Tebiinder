@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,14 @@ const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
   weight: ["400"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+  themeColor: "#150a24",
+};
 
 export const metadata: Metadata = {
   title: "Tebiinder — LFT/LFG Rainbow Six Siege",

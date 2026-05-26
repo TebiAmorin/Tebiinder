@@ -155,7 +155,7 @@ export default function GamerCard({ jugador }: GamerCardProps) {
           <div>
             <div className="flex items-center gap-2">
               {/* Giant Bebas Neue heading */}
-              <h4 className="font-display font-bold text-3xl leading-none uppercase tracking-tight text-white group-hover:text-[#FF5A00] transition-colors">
+              <h4 className="font-display font-bold text-2xl sm:text-3xl leading-none uppercase tracking-tight text-white group-hover:text-[#FF5A00] transition-colors truncate max-w-[160px] sm:max-w-none">
                 {jugador.discord_username.split("#")[0]}
               </h4>
               <span className="px-2 py-0.5 border border-white text-[10px] font-mono font-bold bg-white/10 rounded uppercase text-white">
@@ -193,7 +193,7 @@ export default function GamerCard({ jugador }: GamerCardProps) {
           </div>
 
           {/* R6 Rank Block - Sticker Style */}
-          <div className={`px-4 py-1.5 rounded-xl border-4 border-black neo-shadow ${rankTheme.bg} flex flex-col items-center justify-center min-w-[110px]`}>
+          <div className={`px-3 sm:px-4 py-1.5 rounded-xl border-4 border-black neo-shadow ${rankTheme.bg} flex flex-col items-center justify-center min-w-[90px] sm:min-w-[110px]`}>
             <span className="text-[8px] font-mono font-bold tracking-wider text-black/60 uppercase leading-none">
               RANGO
             </span>
@@ -210,7 +210,7 @@ export default function GamerCard({ jugador }: GamerCardProps) {
           isExpanded ? "max-h-[350px] p-5" : "max-h-0"
         }`}
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
+        <div className="grid grid-cols-2 gap-4 text-xs font-mono">
           <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
             <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Ubisoft Connect</span>
             <span className="font-bold text-white text-sm truncate block mt-0.5">
@@ -222,20 +222,6 @@ export default function GamerCard({ jugador }: GamerCardProps) {
             <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Disponibilidad</span>
             <span className="text-white font-bold text-sm block mt-0.5 capitalize">
               {jugador.disponibilidad.replace("-", " ")}
-            </span>
-          </div>
-
-          <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
-            <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Región</span>
-            <span className="text-white font-bold text-sm block mt-0.5 uppercase">
-              {jugador.region}
-            </span>
-          </div>
-
-          <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
-            <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider">Idiomas</span>
-            <span className="text-white font-bold text-sm block mt-0.5 uppercase">
-              {jugador.idioma}
             </span>
           </div>
         </div>

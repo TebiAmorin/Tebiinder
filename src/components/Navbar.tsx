@@ -28,7 +28,11 @@ export default function Navbar({
 
   const handleSaveSuccess = () => {
     setShowProfileModal(false);
-    window.location.reload();
+    if (pathname === "/buscar") {
+      window.location.reload();
+    } else {
+      window.location.href = "/buscar";
+    }
   };
 
   return (
@@ -47,10 +51,11 @@ export default function Navbar({
             </Link>
 
             {/* Nav Links */}
-            <nav className="flex items-center gap-1 ml-2">
+            <nav className="flex items-center gap-1 ml-1 sm:ml-2">
+              {/* Inicio hidden on mobile — T logo already links to / */}
               <Link
                 href="/"
-                className={`px-3 py-1.5 rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all ${
+                className={`hidden sm:block px-3 py-2 rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all ${
                   pathname === "/"
                     ? "bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     : "text-zinc-400 hover:text-white border-2 border-transparent"
@@ -60,7 +65,7 @@ export default function Navbar({
               </Link>
               <Link
                 href="/buscar"
-                className={`px-3 py-1.5 rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all ${
+                className={`px-3 py-2 rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all ${
                   pathname === "/buscar"
                     ? "bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     : "text-zinc-400 hover:text-white border-2 border-transparent"
@@ -71,7 +76,7 @@ export default function Navbar({
               {userRole === "ojeador" && (
                 <Link
                   href="/admin"
-                  className={`px-3 py-1.5 rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all ${
+                  className={`px-2 sm:px-3 py-2 rounded-xl text-xs font-display font-bold uppercase tracking-wider transition-all ${
                     pathname === "/admin"
                       ? "bg-red-600 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                       : "text-red-400 hover:text-red-300 border-2 border-transparent"
@@ -81,7 +86,7 @@ export default function Navbar({
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
-                    Admin
+                    <span className="hidden sm:inline">Admin</span>
                   </span>
                 </Link>
               )}
@@ -119,7 +124,7 @@ export default function Navbar({
                 </button>
                 <a
                   href="/auth/logout"
-                  className="px-2 py-2 border-2 border-white/30 text-zinc-400 hover:text-white hover:border-white rounded-xl text-[10px] font-bold uppercase transition-colors"
+                  className="px-3 py-2.5 border-2 border-white/30 text-zinc-400 hover:text-white hover:border-white rounded-xl text-[10px] font-bold uppercase transition-colors min-h-[44px] flex items-center"
                 >
                   Salir
                 </a>
