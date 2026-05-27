@@ -62,6 +62,10 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
 
   let rango: string | null = null;
   let kd: number | null = null;
+  let topAtacante: string | null = null;
+  let topDefensor: string | null = null;
+  let rankImageUrl: string | null = null;
+  let rankColor: string | null = null;
 
   if (formData.ubisoftId) {
     try {
@@ -72,7 +76,11 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
       );
       rango = stats.rank;
       kd = stats.kd;
-      console.log(`[r6data] Stats result: rank=${rango}, kd=${kd}`);
+      topAtacante = stats.topAttacker;
+      topDefensor = stats.topDefender;
+      rankImageUrl = stats.rankImageUrl;
+      rankColor = stats.rankColor;
+      console.log(`[r6data] Stats: rank=${rango}, kd=${kd}, atk=${topAtacante}, def=${topDefensor}`);
     } catch (err) {
       console.error(`[r6data] Error fetching stats:`, err instanceof Error ? err.message : err);
     }
@@ -87,6 +95,10 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
       ubisoft_id: formData.ubisoftId ?? null,
       rango,
       kd,
+      top_atacante: topAtacante,
+      top_defensor: topDefensor,
+      rank_image_url: rankImageUrl,
+      rank_color: rankColor,
       rol_principal: formData.rolPrincipal,
       rol_secundario: formData.rolSecundario ?? null,
       disponibilidad: formData.disponibilidad,
@@ -241,10 +253,17 @@ export async function refreshPlayerStats() {
 
   console.log(`[r6data] Refreshing stats for ${jugador.ubisoft_id} (${jugador.plataforma})`);
   const stats = await fetchPlayerStats(jugador.ubisoft_id, jugador.plataforma, true);
-  console.log(`[r6data] Refresh result: rank=${stats.rank}, kd=${stats.kd}`);
+  console.log(`[r6data] Refresh: rank=${stats.rank}, kd=${stats.kd}, atk=${stats.topAttacker}, def=${stats.topDefender}`);
 
   const { error } = await jugadores()
-    .update({ rango: stats.rank, kd: stats.kd })
+    .update({
+      rango: stats.rank,
+      kd: stats.kd,
+      top_atacante: stats.topAttacker,
+      top_defensor: stats.topDefender,
+      rank_image_url: stats.rankImageUrl,
+      rank_color: stats.rankColor,
+    })
     .eq("user_id", user.id);
 
   if (error) throw new Error(error.message);

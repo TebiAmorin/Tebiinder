@@ -108,10 +108,62 @@ interface AccountInfoResponse {
   }>;
 }
 
+interface OperatorStatsResponse {
+  operators?: Array<{
+    operator: string;
+    side: string;
+    roundsPlayed: number;
+    kd: number;
+    kills: number;
+    deaths: number;
+  }>;
+}
+
+// ── Colores oficiales de cada tier de rango ──
+const RANK_COLORS: Record<string, string> = {
+  champion: "#d0073c",
+  diamond: "#5c4eb3",
+  emerald: "#3ddc84",
+  platinum: "#44ccc2",
+  gold: "#daa520",
+  silver: "#9e9e9e",
+  bronze: "#cd7f32",
+  copper: "#b87333",
+};
+
+/**
+ * Genera la URL de la imagen del rango desde r6data.com CDN.
+ * Patrón: https://r6data.com/assets/img/r6_ranks_img/{slug}.webp
+ * Ejemplos: "champion", "platinum-2", "gold-5"
+ */
+function rankToImageUrl(rank: string): string {
+  const romanToNum: Record<string, string> = {
+    I: "1", II: "2", III: "3", IV: "4", V: "5",
+  };
+  const parts = rank.split(" ");
+  const tier = parts[0].toLowerCase();
+  if (parts.length === 1) {
+    // Champion, Unranked
+    return `https://r6data.com/assets/img/r6_ranks_img/${tier}.webp`;
+  }
+  const num = romanToNum[parts[1]] ?? "1";
+  return `https://r6data.com/assets/img/r6_ranks_img/${tier}-${num}.webp`;
+}
+
+/**
+ * Obtiene el color hex asociado al rango.
+ */
+function rankToColor(rank: string): string {
+  const tier = rank.split(" ")[0].toLowerCase();
+  return RANK_COLORS[tier] ?? "#666666";
+}
+
 /**
  * Obtiene las stats de un jugador desde r6data.com.
- * Usa `seasonsStats` como fuente principal (K/D + rango en 1 sola llamada)
- * y `accountInfo` para el avatar.
+ * - seasonsStats → K/D + rango (1 llamada)
+ * - accountInfo → avatar (1 llamada)
+ * - operatorStats → top atacante/defensor (1 llamada)
+ * Total: 3 llamadas en paralelo
  *
  * @param ubisoftId - Nombre de usuario en Ubisoft Connect
  * @param platform  - Plataforma (pc, playstation, xbox)
@@ -124,8 +176,8 @@ export async function fetchPlayerStats(
 ): Promise<R6PlayerStats> {
   const r6Platform: R6Platform = PLATFORM_MAP[platform] ?? "uplay";
 
-  // Fetch seasonsStats + accountInfo en paralelo (2 llamadas)
-  const [seasonsData, accountData] = await Promise.all([
+  // Fetch seasonsStats + accountInfo + operatorStats en paralelo (3 llamadas)
+  const [seasonsData, accountData, operatorData] = await Promise.all([
     r6dataFetch<SeasonsStatsResponse>(
       { type: "seasonsStats", nameOnPlatform: ubisoftId, platformType: r6Platform },
       fresh
@@ -134,12 +186,20 @@ export async function fetchPlayerStats(
       { type: "accountInfo", nameOnPlatform: ubisoftId, platformType: r6Platform },
       fresh
     ).catch(() => null),
+    r6dataFetch<OperatorStatsResponse>(
+      { type: "operatorStats", nameOnPlatform: ubisoftId, platformType: r6Platform, modes: "ranked" },
+      fresh
+    ).catch(() => null),
   ]);
 
   let rank: string | null = null;
   let kd: number | null = null;
   let username = ubisoftId;
   let avatarUrl: string | null = null;
+  let topAttacker: string | null = null;
+  let topDefender: string | null = null;
+  let rankImageUrl: string | null = null;
+  let rankColor: string | null = null;
 
   // ── Extraer datos de seasonsStats ──
   if (seasonsData?.data) {
@@ -179,9 +239,32 @@ export async function fetchPlayerStats(
     avatarUrl = accountData.profilePicture;
   }
 
+  // ── Top operadores de operatorStats ──
+  if (operatorData?.operators && operatorData.operators.length > 0) {
+    const attackers = operatorData.operators
+      .filter((o) => o.side === "Attacker")
+      .sort((a, b) => b.roundsPlayed - a.roundsPlayed);
+    const defenders = operatorData.operators
+      .filter((o) => o.side === "Defender")
+      .sort((a, b) => b.roundsPlayed - a.roundsPlayed);
+
+    topAttacker = attackers[0]?.operator ?? null;
+    topDefender = defenders[0]?.operator ?? null;
+  }
+
+  // ── Derivar imagen y color del rango ──
+  if (rank && rank !== "Unranked") {
+    rankImageUrl = rankToImageUrl(rank);
+    rankColor = rankToColor(rank);
+  }
+
   // ── Fallback: si seasonsStats no dio rango, intentar con type=stats ──
   if (rank === null) {
     rank = await fetchRankFromStats(ubisoftId, r6Platform, fresh);
+    if (rank && rank !== "Unranked") {
+      rankImageUrl = rankToImageUrl(rank);
+      rankColor = rankToColor(rank);
+    }
   }
 
   // ── Fallback: si no hay K/D, intentar con type=stats ──
@@ -189,7 +272,7 @@ export async function fetchPlayerStats(
     kd = await fetchKDFromStats(ubisoftId, r6Platform, fresh);
   }
 
-  return { username, rank, kd, avatarUrl };
+  return { username, rank, kd, avatarUrl, topAttacker, topDefender, rankImageUrl, rankColor };
 }
 
 /**

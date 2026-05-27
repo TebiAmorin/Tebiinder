@@ -32,6 +32,10 @@ export interface Database {
           ubisoft_id: string | null;
           rango: string | null;
           kd: number | null;
+          top_atacante: string | null;
+          top_defensor: string | null;
+          rank_image_url: string | null;
+          rank_color: string | null;
           rol_principal: Rol;
           rol_secundario: Rol | null;
           disponibilidad: Disponibilidad;
@@ -51,6 +55,10 @@ export interface Database {
           ubisoft_id?: string | null;
           rango?: string | null;
           kd?: number | null;
+          top_atacante?: string | null;
+          top_defensor?: string | null;
+          rank_image_url?: string | null;
+          rank_color?: string | null;
           rol_principal: Rol;
           rol_secundario?: Rol | null;
           disponibilidad: Disponibilidad;
@@ -70,6 +78,10 @@ export interface Database {
           ubisoft_id?: string | null;
           rango?: string | null;
           kd?: number | null;
+          top_atacante?: string | null;
+          top_defensor?: string | null;
+          rank_image_url?: string | null;
+          rank_color?: string | null;
           rol_principal?: Rol;
           rol_secundario?: Rol | null;
           disponibilidad?: Disponibilidad;

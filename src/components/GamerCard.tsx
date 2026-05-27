@@ -92,30 +92,54 @@ export function PlatformIcon({ platform, className = "w-4 h-4" }: { platform: st
   }
 }
 
-// Rank Badge color themes - Neo-Brutalist Flat style
-function getRankTheme(rank: string | null) {
+// Rank display name in Spanish
+function getRankDisplayName(rank: string | null): string {
   const r = (rank ?? "").toLowerCase();
-  if (r.includes("champion")) return { name: "Champion", bg: "bg-purple-600", border: "border-black", text: "text-white" };
-  if (r.includes("diamond")) return { name: "Diamante", bg: "bg-indigo-600", border: "border-black", text: "text-white" };
-  if (r.includes("emerald")) return { name: "Esmeralda", bg: "bg-emerald-500", border: "border-black", text: "text-white" };
-  if (r.includes("platinum")) return { name: "Platino", bg: "bg-cyan-400", border: "border-black", text: "text-black" };
-  if (r.includes("gold")) return { name: "Oro", bg: "bg-amber-400", border: "border-black", text: "text-black" };
-  if (r.includes("silver")) return { name: "Plata", bg: "bg-slate-300", border: "border-black", text: "text-black" };
-  if (r.includes("bronze")) return { name: "Bronce", bg: "bg-orange-700", border: "border-black", text: "text-white" };
-  if (r.includes("copper")) return { name: "Cobre", bg: "bg-red-700", border: "border-black", text: "text-white" };
-  return { name: "Sin Rango", bg: "bg-zinc-600", border: "border-black", text: "text-zinc-200" };
+  if (r.includes("champion")) return "Champion";
+  if (r.includes("diamond")) return "Diamante";
+  if (r.includes("emerald")) return "Esmeralda";
+  if (r.includes("platinum")) return "Platino";
+  if (r.includes("gold")) return "Oro";
+  if (r.includes("silver")) return "Plata";
+  if (r.includes("bronze")) return "Bronce";
+  if (r.includes("copper")) return "Cobre";
+  return "Sin Rango";
+}
+
+// Get the subdivision (V, IV, III, II, I) from a rank string
+function getRankSubdivision(rank: string | null): string | null {
+  if (!rank) return null;
+  const parts = rank.split(" ");
+  return parts.length > 1 ? parts[1] : null;
+}
+
+// Fallback rank colors if rank_color is not set
+function getFallbackRankColor(rank: string | null): string {
+  const r = (rank ?? "").toLowerCase();
+  if (r.includes("champion")) return "#d0073c";
+  if (r.includes("diamond")) return "#5c4eb3";
+  if (r.includes("emerald")) return "#3ddc84";
+  if (r.includes("platinum")) return "#44ccc2";
+  if (r.includes("gold")) return "#daa520";
+  if (r.includes("silver")) return "#9e9e9e";
+  if (r.includes("bronze")) return "#cd7f32";
+  if (r.includes("copper")) return "#b87333";
+  return "#666666";
 }
 
 export default function GamerCard({ jugador }: GamerCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const rankTheme = getRankTheme(jugador.rango);
+  const rankColor = jugador.rank_color || getFallbackRankColor(jugador.rango);
+  const rankName = getRankDisplayName(jugador.rango);
+  const rankSub = getRankSubdivision(jugador.rango);
+  const hasRank = jugador.rango && jugador.rango !== "Unranked";
 
   const kdValue = jugador.kd ? Number(jugador.kd) : 0;
-  const kdColor = kdValue >= 1.2 
-    ? "text-[#FF5A00] font-black" 
-    : kdValue >= 1.0 
-      ? "text-amber-400 font-bold" 
+  const kdColor = kdValue >= 1.2
+    ? "text-[#FF5A00] font-black"
+    : kdValue >= 1.0
+      ? "text-amber-400 font-bold"
       : "text-zinc-300";
 
   return (
@@ -162,7 +186,7 @@ export default function GamerCard({ jugador }: GamerCardProps) {
                 {jugador.plataforma.toUpperCase()}
               </span>
             </div>
-            
+
             <div className="flex flex-wrap items-center gap-2 mt-1.5">
               {/* Primary Role Label */}
               <span className="px-3 py-0.5 border-2 border-white rounded text-xs font-mono font-bold uppercase tracking-wide flex items-center gap-1.5 bg-black/60 text-[#00F5D4]">
@@ -181,7 +205,7 @@ export default function GamerCard({ jugador }: GamerCardProps) {
         </div>
 
         {/* Right Side: Stats (Rank & K/D) */}
-        <div className="flex items-center gap-6 self-start md:self-auto mt-3 md:mt-0">
+        <div className="flex items-center gap-4 sm:gap-6 self-start md:self-auto mt-3 md:mt-0">
           {/* KD block */}
           <div className="text-right">
             <span className="block text-[10px] font-mono font-bold tracking-widest text-zinc-400 uppercase">
@@ -192,14 +216,29 @@ export default function GamerCard({ jugador }: GamerCardProps) {
             </span>
           </div>
 
-          {/* R6 Rank Block - Sticker Style */}
-          <div className={`px-3 sm:px-4 py-1.5 rounded-xl border-4 border-black neo-shadow ${rankTheme.bg} flex flex-col items-center justify-center min-w-[90px] sm:min-w-[110px]`}>
-            <span className="text-[8px] font-mono font-bold tracking-wider text-black/60 uppercase leading-none">
-              RANGO
-            </span>
-            <span className={`text-sm font-bold font-display uppercase tracking-tight leading-tight ${rankTheme.text}`}>
-              {rankTheme.name}
-            </span>
+          {/* R6 Rank Block with image */}
+          <div
+            className="px-3 sm:px-4 py-1.5 rounded-xl border-4 border-black neo-shadow flex items-center gap-2.5 min-w-[90px] sm:min-w-[130px]"
+            style={{ backgroundColor: hasRank ? rankColor : "#52525b" }}
+          >
+            {/* Rank icon image */}
+            {jugador.rank_image_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={jugador.rank_image_url}
+                alt={jugador.rango ?? "Rank"}
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
+              />
+            )}
+            <div className="flex flex-col items-start justify-center">
+              <span className="text-[8px] font-mono font-bold tracking-wider uppercase leading-none" style={{ color: "rgba(0,0,0,0.5)" }}>
+                RANGO
+              </span>
+              <span className="text-sm font-bold font-display uppercase tracking-tight leading-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                {rankName}
+                {rankSub && <span className="text-xs ml-0.5 opacity-80">{rankSub}</span>}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -207,7 +246,7 @@ export default function GamerCard({ jugador }: GamerCardProps) {
       {/* Expanded details container */}
       <div
         className={`transition-all duration-300 ease-in-out bg-black/60 border-t-4 border-white overflow-hidden ${
-          isExpanded ? "max-h-[350px] p-5" : "max-h-0"
+          isExpanded ? "max-h-[450px] p-5" : "max-h-0"
         }`}
       >
         <div className="grid grid-cols-2 gap-4 text-xs font-mono">
@@ -224,12 +263,36 @@ export default function GamerCard({ jugador }: GamerCardProps) {
               {jugador.disponibilidad.replace("-", " ")}
             </span>
           </div>
+
+          {/* Top Operators */}
+          {(jugador.top_atacante || jugador.top_defensor) && (
+            <>
+              <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
+                <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider flex items-center gap-1">
+                  <svg className="w-3 h-3 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2L3 7l7 5 7-5-7-5zM3 12l7 5 7-5" /></svg>
+                  Top Atacante
+                </span>
+                <span className="font-bold text-[#FF5A00] text-sm block mt-0.5">
+                  {jugador.top_atacante ?? "—"}
+                </span>
+              </div>
+              <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
+                <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider flex items-center gap-1">
+                  <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" /></svg>
+                  Top Defensor
+                </span>
+                <span className="font-bold text-[#00F5D4] text-sm block mt-0.5">
+                  {jugador.top_defensor ?? "—"}
+                </span>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Actions bar inside expanded */}
         <div className="flex flex-col gap-3 mt-6 pt-5 border-t-2 border-white/10">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            {/* Discord Deep Link — opens in Discord app via protocol */}
+            {/* Discord Deep Link */}
             <a
               href={`discord://-/users/${jugador.discord_id}`}
               onClick={(e) => e.stopPropagation()}

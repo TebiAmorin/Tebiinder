@@ -10,6 +10,10 @@ export interface R6PlayerStats {
   rank: string | null;
   kd: number | null;
   avatarUrl: string | null;
+  topAttacker: string | null;
+  topDefender: string | null;
+  rankImageUrl: string | null;
+  rankColor: string | null;
 }
 
 // ── Plataformas ──
