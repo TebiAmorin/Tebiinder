@@ -314,6 +314,6 @@ async function fetchKDFromStats(
   }
 }
 
-// Re-exportar tipos para mantener compatibilidad
-export type { R6PlayerStats, R6Platform };
-export { PLATFORM_MAP };
+// Nota: NO re-exportar tipos ni valores aquí.
+// En un módulo "use server", solo se pueden exportar funciones async.
+// Importar tipos desde "@/lib/r6data/types" directamente.
