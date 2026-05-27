@@ -65,14 +65,16 @@ export async function upsertPlayerProfile(formData: PlayerFormData) {
 
   if (formData.ubisoftId) {
     try {
+      console.log(`[r6data] Fetching stats for ${formData.ubisoftId} (${formData.plataforma})`);
       const stats = await fetchPlayerStats(
         formData.ubisoftId,
         formData.plataforma
       );
       rango = stats.rank;
       kd = stats.kd;
-    } catch {
-      // Si falla la API, seguimos sin stats
+      console.log(`[r6data] Stats result: rank=${rango}, kd=${kd}`);
+    } catch (err) {
+      console.error(`[r6data] Error fetching stats:`, err instanceof Error ? err.message : err);
     }
   }
 
@@ -237,7 +239,9 @@ export async function refreshPlayerStats() {
 
   if (!jugador?.ubisoft_id) throw new Error("Sin Ubisoft ID configurado");
 
+  console.log(`[r6data] Refreshing stats for ${jugador.ubisoft_id} (${jugador.plataforma})`);
   const stats = await fetchPlayerStats(jugador.ubisoft_id, jugador.plataforma, true);
+  console.log(`[r6data] Refresh result: rank=${stats.rank}, kd=${stats.kd}`);
 
   const { error } = await jugadores()
     .update({ rango: stats.rank, kd: stats.kd })
