@@ -54,7 +54,7 @@ El proyecto funciona como un híbrido entre un tablón de anuncios y Tinder. Eli
   - Habilitar login de Discord en Supabase.
 - [ ] Fase 2 Lógica Backend & APIs
   - Configurar las políticas de seguridad (RLS) en Supabase para los distintos roles.
-  - Desarrollar la función (Server Action) para extraer datos de la API de Ubisoft (Rango, KD).
+  - Desarrollar la función (Server Action) para extraer datos de r6data.com API (Rango, KD). Env var: R6DATA_API_KEY.
   - Crear la lógica de cálculo matemático para las medias de los equipos.
 - [ ] Fase 3 Interfaz de Usuario (UI)
   - Construir la Landing Page con los tablones visuales (Cards estilo pegatina).

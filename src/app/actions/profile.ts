@@ -1,8 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { fetchPlayerStats } from "@/lib/r6tracker/api";
-import { calculateTeamStats } from "@/lib/r6tracker/team-stats";
+import { fetchPlayerStats } from "@/lib/r6data/api";
+import { calculateTeamStats } from "@/lib/r6data/team-stats";
 import type { Rol, Plataforma, Disponibilidad } from "@/types/database";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
