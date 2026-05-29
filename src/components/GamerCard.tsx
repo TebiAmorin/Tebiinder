@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { Database } from "@/types/database";
 
 type Jugador = Database["public"]["Tables"]["jugadores"]["Row"];
@@ -163,11 +164,13 @@ export default function GamerCard({ jugador }: GamerCardProps) {
           <div className="relative">
             {/* Sticker Avatar with thick border */}
             {jugador.discord_avatar ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={jugador.discord_avatar}
                 alt={jugador.discord_username}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-xl border-4 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] object-cover bg-zinc-800"
+                unoptimized={jugador.discord_avatar.includes("embed/avatars")}
               />
             ) : (
               <div className="w-16 h-16 bg-zinc-800 rounded-xl border-4 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-display font-bold text-3xl text-zinc-400">
@@ -223,11 +226,13 @@ export default function GamerCard({ jugador }: GamerCardProps) {
           >
             {/* Rank icon image */}
             {jugador.rank_image_url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={jugador.rank_image_url}
                 alt={jugador.rango ?? "Rank"}
-                className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
+                width={40}
+                height={40}
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain"
+                style={{ filter: "drop-shadow(0 0 1px rgba(0,0,0,1)) drop-shadow(0 2px 3px rgba(0,0,0,0.8)) drop-shadow(0 0 6px rgba(0,0,0,0.4))" }}
               />
             )}
             <div className="flex flex-col items-start justify-center">
@@ -272,18 +277,42 @@ export default function GamerCard({ jugador }: GamerCardProps) {
                   <svg className="w-3 h-3 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2L3 7l7 5 7-5-7-5zM3 12l7 5 7-5" /></svg>
                   Top Atacante
                 </span>
-                <span className="font-bold text-[#FF5A00] text-sm block mt-0.5">
-                  {jugador.top_atacante ?? "—"}
-                </span>
+                <div className="flex items-center gap-2 mt-1">
+                  {jugador.top_atacante && (
+                    <Image
+                      src={`https://r6operators.marcopixel.eu/icons/svg/${jugador.top_atacante.toLowerCase()}.svg`}
+                      alt={jugador.top_atacante}
+                      width={28}
+                      height={28}
+                      className="w-7 h-7 object-contain drop-shadow-[0_1px_2px_rgba(255,90,0,0.6)]"
+                      unoptimized
+                    />
+                  )}
+                  <span className="font-bold text-[#FF5A00] text-sm">
+                    {jugador.top_atacante ?? "—"}
+                  </span>
+                </div>
               </div>
               <div className="bg-[#1c0f2f] p-3 border-2 border-white/20 rounded-xl">
                 <span className="block text-[9px] text-zinc-400 uppercase font-bold tracking-wider flex items-center gap-1">
                   <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" /></svg>
                   Top Defensor
                 </span>
-                <span className="font-bold text-[#00F5D4] text-sm block mt-0.5">
-                  {jugador.top_defensor ?? "—"}
-                </span>
+                <div className="flex items-center gap-2 mt-1">
+                  {jugador.top_defensor && (
+                    <Image
+                      src={`https://r6operators.marcopixel.eu/icons/svg/${jugador.top_defensor.toLowerCase()}.svg`}
+                      alt={jugador.top_defensor}
+                      width={28}
+                      height={28}
+                      className="w-7 h-7 object-contain drop-shadow-[0_1px_2px_rgba(0,245,212,0.6)]"
+                      unoptimized
+                    />
+                  )}
+                  <span className="font-bold text-[#00F5D4] text-sm">
+                    {jugador.top_defensor ?? "—"}
+                  </span>
+                </div>
               </div>
             </>
           )}

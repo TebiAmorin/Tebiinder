@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Tebiinder Design System — Soft Neo-Brutalism / Sticker Style
+   Tebiinder Design System — Pure Neo-Brutalist / Purple Sticker Style
    ============================================================ */
 
 :root {
-  --bg-primary: #5f25a3; /* Lavender Purple */
-  --bg-card: #150a24; /* Sólido morado oscuro */
-  --border-card: #FFFFFF; /* Borde blanco grueso */
-  --text-primary: #FFFFFF;
-  --text-secondary: #E9D5FF; /* Lavanda claro */
-  --accent-orange: #FF5A00; /* Naranja cálido vibrante del botón */
-  --accent-blue: #00F5D4; /* Turquesa */
-  --bg-grid: rgba(255, 255, 255, 0.08); /* Sutil rejilla blanca */
+  --bg-primary: #5f25a3; /* Vibrant Purple */
+  --bg-card: #150a24; /* Solid Deep Purple */
+  --border-card: #ffffff; /* Thick white card border */
+  --text-primary: #ffffff;
+  --text-secondary: #e9d5ff; /* Light Lavender */
+  --accent-orange: #ff5a00; /* Vibrant Orange */
+  --accent-blue: #00f5d4; /* Turquoise */
+  --bg-grid: rgba(255, 255, 255, 0.08); /* White sutil grid lines */
 }
 
 @theme inline {
@@ -32,20 +32,30 @@
 /* Mobile touch defaults */
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  background-image:
-    linear-gradient(var(--bg-grid) 1.5px, transparent 1.5px),
-    linear-gradient(90deg, var(--bg-grid) 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
+  
+  /* 
+     Dynamic Purple Gradient background with wave motion 
+  */
+  background-image: 
+    radial-gradient(circle at 10% 20%, #7b2cbf 0%, transparent 60%),
+    radial-gradient(circle at 90% 80%, #3c096c 0%, transparent 60%),
+    linear-gradient(135deg, #5f25a3 0%, #4c1a80 100%);
+  background-size: 200% 200%, 200% 200%, 100% 100%;
+  background-attachment: fixed;
+  animation: waveMotion 16s ease-in-out infinite;
+  
   min-height: 100vh;
   min-height: 100dvh;
   position: relative;
   overflow-x: hidden;
+  
   /* Safe area for iOS notch/Dynamic Island */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -96,4 +106,73 @@ body {
 .neo-shadow-hover:active {
   transform: translateY(2px);
   box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+}
+
+/* 
+   Background contrast waves motion animation
+   This shifts the radial glow spots slowly to create contrast movement
+*/
+@keyframes waveMotion {
+  0% {
+    background-position: 
+      0% 50%, 100% 50%,
+      0% 0%;
+  }
+  50% {
+    background-position: 
+      50% 100%, 50% 0%,
+      0% 0%;
+  }
+  100% {
+    background-position: 
+      0% 50%, 100% 50%,
+      0% 0%;
+  }
+}
+
+/* Sticker Style Image Outline Helper */
+.sticker-outline {
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,1));
+  border: 4px solid #ffffff;
+}
+
+/* ============================================================
+   3D PERSPECTIVE BACKGROUND GRID
+   ============================================================ */
+.perspective-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 750px;
+  perspective-origin: 50% 25%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.perspective-grid-inner {
+  position: absolute;
+  width: 300%;
+  height: 300%;
+  top: -50%;
+  left: -100%;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px);
+  background-size: 50px 50px;
+  transform: rotateX(68deg);
+  transform-origin: 50% 50%;
+  opacity: 0.95;
+  animation: gridScroll 18s linear infinite;
+}
+
+@keyframes gridScroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 900px;
+  }
 }

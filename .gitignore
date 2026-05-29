@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+
+# Cursor config containing Lazyweb bearer token
+.cursor/mcp.json
+
+# Claude settings containing Lazyweb bearer token
+.claude/

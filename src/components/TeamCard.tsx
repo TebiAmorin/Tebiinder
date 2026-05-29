@@ -144,12 +144,19 @@ export default function TeamCard({ equipo }: TeamCardProps) {
             </span>
             <div className="flex flex-wrap gap-2">
               {equipo.integrantes_ubisoft_ids.map((id, index) => (
-                <span
+                <a
                   key={index}
-                  className="px-3 py-1 rounded-xl text-xs font-mono bg-black/40 border-2 border-white/20 text-white font-bold"
+                  href={`https://r6.tracker.network/r6siege/profile/${equipo.plataforma === "pc" ? "uplay" : equipo.plataforma === "playstation" ? "psn" : "xbl"}/${encodeURIComponent(id)}/overview`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="px-3 py-1 rounded-xl text-xs font-mono bg-black/40 border-2 border-white/20 text-white font-bold hover:bg-[#FF5A00]/20 hover:border-[#FF5A00] hover:text-[#FF5A00] transition-colors flex items-center gap-1.5"
                 >
                   ⚔️ {id}
-                </span>
+                  <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
               ))}
             </div>
           </div>
