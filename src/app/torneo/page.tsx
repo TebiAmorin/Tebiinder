@@ -43,7 +43,7 @@ export default async function TorneoPage() {
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight uppercase text-white leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-display font-black tracking-wide uppercase text-white leading-tight">
               OWN MASTERS<br />RAINBOW SIX SIEGE
             </h1>
 
@@ -56,7 +56,7 @@ export default async function TorneoPage() {
         {/* ── CALENDARIO + INSCRIPCIÓN ── */}
         <section className="w-full space-y-6 mb-12">
           <div className="border-b-2 border-white/10 pb-3">
-            <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wide text-white leading-none">
+            <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wide text-white leading-snug">
               Calendario e Inscripción
             </h2>
             <p className="text-zinc-400 font-mono text-xs mt-1.5">
@@ -75,7 +75,7 @@ export default async function TorneoPage() {
                   </span>
                   <span className="text-[10px] font-mono text-zinc-500">BO1</span>
                 </div>
-                <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase leading-none">
+                <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase leading-snug">
                   Jueves 5 de Junio — 18:00H
                 </h3>
                 <p className="text-zinc-400 text-xs font-sans leading-relaxed max-w-md">
@@ -106,7 +106,7 @@ export default async function TorneoPage() {
                   </span>
                   <span className="text-[10px] font-mono text-zinc-500">BO1</span>
                 </div>
-                <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase leading-none">
+                <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase leading-snug">
                   Viernes 13 de Junio — 14:00H
                 </h3>
                 <p className="text-zinc-400 text-xs font-sans leading-relaxed max-w-md">
@@ -137,7 +137,7 @@ export default async function TorneoPage() {
                   </span>
                   <span className="text-[10px] font-mono text-zinc-500">BO3</span>
                 </div>
-                <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase leading-none">
+                <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase leading-snug">
                   Jueves 19 de Junio
                 </h3>
                 <p className="text-zinc-400 text-xs font-sans leading-relaxed max-w-md">
@@ -154,7 +154,7 @@ export default async function TorneoPage() {
               <span className="px-3 py-1 bg-[#00f5d4] text-black border-2 border-black text-[10px] font-mono font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-lg inline-block">
                 Showmatch Presencial
               </span>
-              <h3 className="font-display font-black text-2xl sm:text-3xl text-white uppercase leading-none">
+              <h3 className="font-display font-black text-2xl sm:text-3xl text-white uppercase leading-snug">
                 R6 Showdown — OWN Valencia
               </h3>
               <p className="font-display font-black text-lg text-[#ff5a00]">3 — 5 de Julio</p>
@@ -168,7 +168,7 @@ export default async function TorneoPage() {
         {/* ── PREMIOS ── */}
         <section className="w-full mb-12">
           <div className="border-b-2 border-white/10 pb-3 mb-6">
-            <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wide text-white leading-none">
+            <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wide text-white leading-snug">
               Premios
             </h2>
           </div>
@@ -177,7 +177,7 @@ export default async function TorneoPage() {
             {/* 1er puesto */}
             <div className="bg-[#150a24] border-3 border-[#ffd700] rounded-2xl p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center space-y-3">
               <span className="text-4xl">&#x1F947;</span>
-              <h3 className="font-display font-black text-xl text-white uppercase leading-none">1er Puesto</h3>
+              <h3 className="font-display font-black text-xl text-white uppercase leading-snug">1er Puesto</h3>
               <div className="space-y-1.5">
                 <p className="font-display font-black text-2xl text-[#FF5A00]">1.000 &#x20AC;</p>
                 <p className="text-zinc-300 text-xs font-sans leading-relaxed">
@@ -189,7 +189,7 @@ export default async function TorneoPage() {
             {/* 2do puesto */}
             <div className="bg-[#150a24] border-3 border-[#c0c0c0] rounded-2xl p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center space-y-3">
               <span className="text-4xl">&#x1F948;</span>
-              <h3 className="font-display font-black text-xl text-white uppercase leading-none">2do Puesto</h3>
+              <h3 className="font-display font-black text-xl text-white uppercase leading-snug">2do Puesto</h3>
               <div className="space-y-1.5">
                 <p className="font-display font-black text-2xl text-[#FF5A00]">500 &#x20AC;</p>
                 <p className="text-zinc-300 text-xs font-sans leading-relaxed">
@@ -201,7 +201,7 @@ export default async function TorneoPage() {
             {/* 3er puesto */}
             <div className="bg-[#150a24] border-3 border-[#cd7f32] rounded-2xl p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center space-y-3">
               <span className="text-4xl">&#x1F949;</span>
-              <h3 className="font-display font-black text-xl text-white uppercase leading-none">3er Puesto</h3>
+              <h3 className="font-display font-black text-xl text-white uppercase leading-snug">3er Puesto</h3>
               <div className="space-y-1.5">
                 <p className="font-display font-black text-lg text-[#00f5d4]">Pack Juegos Ubisoft</p>
                 <p className="text-zinc-300 text-xs font-sans leading-relaxed">
@@ -215,20 +215,20 @@ export default async function TorneoPage() {
         {/* ── REQUISITOS ── */}
         <section className="w-full mb-12">
           <div className="bg-[#150a24] border-3 border-white rounded-2xl p-6 sm:p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-5">
-            <h2 className="font-display font-black text-2xl uppercase tracking-wide text-white leading-none border-b-2 border-white/10 pb-3">
+            <h2 className="font-display font-black text-2xl uppercase tracking-wide text-white leading-snug border-b-2 border-white/10 pb-3">
               Requisitos
             </h2>
             <ul className="space-y-4 font-mono text-sm text-zinc-300">
               <li className="flex items-start gap-3">
-                <span className="text-[#ff5a00] font-bold text-lg leading-none shrink-0">&#x00BB;</span>
+                <span className="text-[#ff5a00] font-bold text-lg leading-snug shrink-0">&#x00BB;</span>
                 <span>Roster de <strong className="text-white">5 jugadores</strong> + 1 suplente (opcional).</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[#ff5a00] font-bold text-lg leading-none shrink-0">&#x00BB;</span>
+                <span className="text-[#ff5a00] font-bold text-lg leading-snug shrink-0">&#x00BB;</span>
                 <span>Inscripción del equipo en <strong className="text-white">Challengermode</strong> antes de la fecha del QL.</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-[#ff5a00] font-bold text-lg leading-none shrink-0">&#x00BB;</span>
+                <span className="text-[#ff5a00] font-bold text-lg leading-snug shrink-0">&#x00BB;</span>
                 <span>Estar presente y conectado el día del clasificatorio para los emparejamientos.</span>
               </li>
             </ul>
@@ -252,7 +252,7 @@ export default async function TorneoPage() {
         <section className="w-full mb-10">
           <div className="bg-[#ff5a00] border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
             <div className="text-center sm:text-left">
-              <h3 className="font-display font-black text-2xl sm:text-3xl uppercase text-white leading-none mb-2">
+              <h3 className="font-display font-black text-2xl sm:text-3xl uppercase text-white leading-snug mb-2">
                 &#x00BF;Necesitas equipo?
               </h3>
               <p className="text-white/90 text-sm font-sans max-w-sm">

@@ -62,7 +62,7 @@ export default function Navbar({
                 <TebiinderLogo size={48} className="sm:w-[56px] sm:h-[56px]" />
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-display font-black text-2xl sm:text-3xl tracking-wide uppercase text-white leading-none">
+                <span className="font-display font-black text-2xl sm:text-3xl tracking-wide uppercase text-white leading-snug">
                   Tebiinder
                 </span>
                 <span className="font-mono text-[9px] text-[#00f5d4] uppercase tracking-widest font-black mt-1">

@@ -72,7 +72,7 @@ export default function TeamCard({ equipo }: TeamCardProps) {
           <div>
             <div className="flex items-center gap-2">
               {/* Giant Bebas Neue heading */}
-              <h4 className="font-display font-bold text-2xl sm:text-3xl leading-none uppercase tracking-tight text-white group-hover:text-[#00F5D4] transition-colors truncate max-w-[160px] sm:max-w-none">
+              <h4 className="font-display font-bold text-2xl sm:text-3xl leading-snug uppercase tracking-wide text-white group-hover:text-[#00F5D4] transition-colors truncate max-w-[160px] sm:max-w-none">
                 {equipo.nombre_equipo}
               </h4>
               <span className="px-2 py-0.5 border border-white text-[10px] font-mono font-bold bg-white/10 rounded uppercase text-white">

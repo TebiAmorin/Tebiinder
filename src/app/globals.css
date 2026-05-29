@@ -81,6 +81,12 @@ body {
   background: var(--accent-orange);
 }
 
+/* Bebas Neue global fix — condensed font needs extra letter-spacing */
+.font-display {
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+
 /* Neo-Brutalist Solid Shadow Utilities */
 .neo-shadow {
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);

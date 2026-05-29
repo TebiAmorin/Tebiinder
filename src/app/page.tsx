@@ -47,7 +47,7 @@ export default async function Home() {
         {/* ── HERO ── */}
         <section className="w-full max-w-3xl text-center pt-14 pb-6 sm:pt-20 sm:pb-10 space-y-6">
 
-          <h1 className="text-6xl sm:text-8xl md:text-9xl font-display font-black tracking-tight uppercase leading-[0.8] text-white select-none drop-shadow-[5px_5px_0px_rgba(0,0,0,0.5)]">
+          <h1 className="text-6xl sm:text-8xl md:text-9xl font-display font-black tracking-wide uppercase leading-[0.85] text-white select-none drop-shadow-[5px_5px_0px_rgba(0,0,0,0.5)]">
             TEBIINDER
           </h1>
 
@@ -131,7 +131,7 @@ export default async function Home() {
                 <div className={`w-11 h-11 ${s.color} ${s.textDark ? "text-black" : "text-white"} border-3 border-black text-lg font-display font-black rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center`}>
                   {s.num}
                 </div>
-                <h3 className="font-display font-black text-base uppercase tracking-wider text-white leading-none">
+                <h3 className="font-display font-black text-base uppercase tracking-wider text-white leading-snug">
                   {s.title}
                 </h3>
                 <p className="text-[11px] font-mono text-zinc-400 leading-relaxed">{s.desc}</p>
@@ -157,7 +157,7 @@ export default async function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#150a24] via-transparent to-transparent" />
               <div className="absolute bottom-3 left-5 right-5 flex items-end justify-between">
                 <div>
-                  <h3 className="font-display font-black text-lg sm:text-2xl uppercase text-white leading-none drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                  <h3 className="font-display font-black text-lg sm:text-2xl uppercase text-white leading-snug drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                     OWN Masters R6 Siege
                   </h3>
                   <span className="font-mono text-white/70 text-[10px] font-bold drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
@@ -182,7 +182,7 @@ export default async function Home() {
                 className="bg-black/30 border-2 border-[#ff5a00]/40 rounded-xl p-4 text-center hover:border-[#ff5a00] hover:bg-[#ff5a00]/10 transition-colors group"
               >
                 <span className="text-[8px] font-mono font-black text-[#ff5a00] uppercase tracking-widest block">QL1</span>
-                <span className="font-display font-black text-base sm:text-xl text-white leading-none block mt-1">5 Jun</span>
+                <span className="font-display font-black text-base sm:text-xl text-white leading-snug block mt-1">5 Jun</span>
                 <span className="font-mono text-zinc-400 text-[10px] block mt-0.5">18:00H</span>
                 <span className="text-[9px] font-mono font-bold text-[#ff5a00] mt-2 block group-hover:underline">Inscribirse &#x2192;</span>
               </a>
@@ -193,13 +193,13 @@ export default async function Home() {
                 className="bg-black/30 border-2 border-[#ff5a00]/40 rounded-xl p-4 text-center hover:border-[#ff5a00] hover:bg-[#ff5a00]/10 transition-colors group"
               >
                 <span className="text-[8px] font-mono font-black text-[#ff5a00] uppercase tracking-widest block">QL2</span>
-                <span className="font-display font-black text-base sm:text-xl text-white leading-none block mt-1">13 Jun</span>
+                <span className="font-display font-black text-base sm:text-xl text-white leading-snug block mt-1">13 Jun</span>
                 <span className="font-mono text-zinc-400 text-[10px] block mt-0.5">14:00H</span>
                 <span className="text-[9px] font-mono font-bold text-[#ff5a00] mt-2 block group-hover:underline">Inscribirse &#x2192;</span>
               </a>
               <div className="bg-black/30 border-2 border-[#00f5d4]/40 rounded-xl p-4 text-center">
                 <span className="text-[8px] font-mono font-black text-[#00f5d4] uppercase tracking-widest block">Playoffs</span>
-                <span className="font-display font-black text-base sm:text-xl text-white leading-none block mt-1">19 Jun</span>
+                <span className="font-display font-black text-base sm:text-xl text-white leading-snug block mt-1">19 Jun</span>
                 <span className="font-mono text-zinc-400 text-[10px] block mt-0.5">BO3</span>
                 <span className="text-[9px] font-mono text-zinc-500 mt-2 block">4 equipos</span>
               </div>
@@ -210,7 +210,7 @@ export default async function Home() {
         {/* ── TABLÓN DE FICHAJES ── */}
         <section className="w-full max-w-3xl py-10">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wide text-white leading-none">
+            <h2 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-wide text-white leading-snug">
               Tablón de Fichajes
             </h2>
             <Link
@@ -255,7 +255,7 @@ export default async function Home() {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-display font-black text-sm text-white uppercase truncate leading-none">
+                        <span className="font-display font-black text-sm text-white uppercase truncate leading-snug">
                           {jugador.ubisoft_id ?? jugador.discord_username.split("#")[0]}
                         </span>
                         {jugador.rank_image_url && (
@@ -310,7 +310,7 @@ export default async function Home() {
                       {equipo.nombre_equipo.split(" ").map((w) => w[0]).join("").substring(0, 3).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="font-display font-black text-sm text-white uppercase truncate leading-none block">
+                      <span className="font-display font-black text-sm text-white uppercase truncate leading-snug block">
                         {equipo.nombre_equipo}
                       </span>
                       <div className="flex items-center gap-2 mt-1">
@@ -342,7 +342,7 @@ export default async function Home() {
           <section className="w-full max-w-3xl py-8">
             <div className="bg-[#ff5a00] border-4 border-black rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
               <div className="text-center sm:text-left">
-                <h3 className="font-display font-black text-2xl sm:text-3xl uppercase text-white leading-none mb-2">
+                <h3 className="font-display font-black text-2xl sm:text-3xl uppercase text-white leading-snug mb-2">
                   &#x00BF;Sin equipo?
                 </h3>
                 <p className="text-white/90 text-sm font-sans max-w-sm">
